@@ -19,7 +19,7 @@ This Gem was forked because for Nimbl's dynamic forms, Rails for some reason
  allows us to specify regexes so the Javascript can find the inputs and 
  replace their id's for cloned forms.
 
-We specify this in applications that use nimbl_cms:
+We add this to the Gemfile in applications that use nimbl_cms:
 `gem 'cocoon', github: 'hashbangnz/cocoon', branch: 'master'`
 
 
