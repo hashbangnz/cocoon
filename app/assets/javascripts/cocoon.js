@@ -46,36 +46,51 @@
         insertionMethod       = $this.data('association-insertion-method') || $this.data('association-insertion-position') || 'before',
         insertionNode         = $this.data('association-insertion-node'),
         insertionTraversal    = $this.data('association-insertion-traversal'),
+        manualRegex1          = $this.data('manual-regex1'),
+        manualRegex2          = $this.data('manual-regex2'),
         count                 = parseInt($this.data('count'), 10),
         regexp_braced         = new RegExp('\\[new_' + assoc + '\\](.*?\\s)', 'g'),
         regexp_underscord     = new RegExp('_new_' + assoc + '_(\\w*)', 'g'),
         new_id                = create_new_id(),
-        new_content           = content.replace(regexp_braced, newcontent_braced(new_id)),
-        new_contents          = [];
+        new_content,
+        new_contents;
 
+    if(manualRegex1 && manualRegex2) {
+      console.log("Using manual regex");
 
-    if (new_content == content) {
-      regexp_braced     = new RegExp('\\[new_' + assocs + '\\](.*?\\s)', 'g');
-      regexp_underscord = new RegExp('_new_' + assocs + '_(\\w*)', 'g');
-      new_content       = content.replace(regexp_braced, newcontent_braced(new_id));
-    }
+      manual_regex1 = new RegExp(manualRegex1, 'g');
+      manual_regex2 = new RegExp(manualRegex2, 'g');
+      new_content = content.replace(manual_regex1, "$1"+new_id+"$2");
+      new_content = new_content.replace(manual_regex2, "$1"+new_id+"$2");
+      new_contents = [new_content];
 
-    new_content = new_content.replace(regexp_underscord, newcontent_underscord(new_id));
-    new_contents = [new_content];
+    } else {
 
-    count = (isNaN(count) ? 1 : Math.max(count, 1));
-    count -= 1;
-
-    while (count) {
-      new_id      = create_new_id();
       new_content = content.replace(regexp_braced, newcontent_braced(new_id));
-      new_content = new_content.replace(regexp_underscord, newcontent_underscord(new_id));
-      new_contents.push(new_content);
 
+      if (new_content == content) {
+        regexp_braced = new RegExp('\\[new_' + assocs + '\\](.*?\\s)', 'g');
+        regexp_underscord = new RegExp('_new_' + assocs + '_(\\w*)', 'g');
+        new_content = content.replace(regexp_braced, newcontent_braced(new_id));
+      }
+
+      new_content = new_content.replace(regexp_underscord, newcontent_underscord(new_id));
+      new_contents = [new_content];
+
+      count = (isNaN(count) ? 1 : Math.max(count, 1));
       count -= 1;
+
+      while (count) {
+        new_id = create_new_id();
+        new_content = content.replace(regexp_braced, newcontent_braced(new_id));
+        new_content = new_content.replace(regexp_underscord, newcontent_underscord(new_id));
+        new_contents.push(new_content);
+
+        count -= 1;
+      }
     }
 
-    var insertionNodeElem = getInsertionNodeElem(insertionNode, insertionTraversal, $this)
+    var insertionNodeElem = getInsertionNodeElem(insertionNode, insertionTraversal, $this);
 
     if( !insertionNodeElem || (insertionNodeElem.length == 0) ){
       console.warn("Couldn't find the element to insert the template. Make sure your `data-association-insertion-*` on `link_to_add_association` is correct.")

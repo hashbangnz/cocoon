@@ -92,6 +92,9 @@ module Cocoon
         html_options[:'data-association'] = association.to_s.singularize
         html_options[:'data-associations'] = association.to_s.pluralize
 
+        html_options[:'data-manual-regex1'] = render_options.delete(:manual_regex1)
+        html_options[:'data-manual-regex2'] = render_options.delete(:manual_regex2)
+
         new_object = create_object(f, association, force_non_association_create)
         new_object = wrap_object.call(new_object) if wrap_object.respond_to?(:call)
 

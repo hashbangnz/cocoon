@@ -12,6 +12,17 @@ It is compatible with rails 3 and rails 4.
 
 This project is not related to [Apache Cocoon](http://cocoon.apache.org/).
 
+## THIS FORK
+
+This Gem was forked because for Nimbl's dynamic forms, Rails for some reason
+ uses a naming scheme for inputs that defeats Cocoon's Javascript. The fork
+ allows us to specify regexes so the Javascript can find the inputs and 
+ replace their id's for cloned forms.
+
+We specify this in applications that use nimbl_cms:
+`gem 'cocoon', github: 'hashbangnz/cocoon', branch: 'master'`
+
+
 ## Prerequisites
 
 This gem depends on jQuery, so it's most useful in a Rails 3 project where you are already using jQuery.
